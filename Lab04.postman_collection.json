@@ -1,0 +1,555 @@
+{
+  "info": {
+    "name": "TH4 - Order Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "auth_url",
+      "value": "http://127.0.0.1:5001"
+    },
+    {
+      "key": "products_url",
+      "value": "http://127.0.0.1:5002"
+    },
+    {
+      "key": "orders_url",
+      "value": "http://127.0.0.1:5003"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "order_id",
+      "value": ""
+    },
+    {
+      "key": "item_id",
+      "value": ""
+    },
+    {
+      "key": "extra_item_id",
+      "value": ""
+    },
+    {
+      "key": "product1_id",
+      "value": ""
+    },
+    {
+      "key": "product2_id",
+      "value": ""
+    },
+    {
+      "key": "product3_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Dang nhap TH2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{auth_url}}/login",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userName\": \"phat\",\n  \"password\": \"UGhhdEAxMjM=\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.collectionVariables.set(\"token\", pm.response.json().access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01.1 - Tao san pham test qua TH3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{products_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Ban phim TH4\",\n  \"description\": \"Du lieu demo TH4\",\n  \"price\": \"250000.00\",\n  \"quantity\": 20\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"product1_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01.2 - Tao san pham test qua TH3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{products_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Chuot TH4\",\n  \"description\": \"Du lieu demo TH4\",\n  \"price\": \"150000.00\",\n  \"quantity\": 30\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"product2_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01.3 - Tao san pham test qua TH3",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{products_url}}/products",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Man hinh TH4\",\n  \"description\": \"Du lieu demo TH4\",\n  \"price\": \"2500000.00\",\n  \"quantity\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"product3_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Tao don hang",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_name\": \"Nguyễn Văn A\",\n  \"customer_email\": \"a@example.com\",\n  \"items\": [\n    {\n      \"product_id\": {{product1_id}},\n      \"quantity\": 2\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "const d = pm.response.json(); pm.collectionVariables.set(\"order_id\", d.id); pm.collectionVariables.set(\"item_id\", d.items[0].id); pm.test(\"Tong tien\", () => pm.expect(d.total_amount).to.eql(\"500000.00\"));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Danh sach don",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{orders_url}}/orders"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Chi tiet don",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{orders_url}}/orders/{{order_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Danh sach items",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{orders_url}}/order_items?order_id={{order_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Chi tiet item",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{orders_url}}/order_items/{{item_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Them item",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/order_items",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"order_id\": {{order_id}},\n  \"product_id\": {{product2_id}},\n  \"quantity\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"extra_item_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Sua so luong",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/order_items/{{item_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"quantity\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Xoa item",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{orders_url}}/order_items/{{extra_item_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Xoa don pending",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{orders_url}}/orders/{{order_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Tao don de hoan tat",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_name\": \"Nguyễn Văn B\",\n  \"customer_email\": \"b@example.com\",\n  \"items\": [\n    {\n      \"product_id\": {{product2_id}},\n      \"quantity\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.collectionVariables.set(\"order_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 - Cap nhat trang thai",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/orders/{{order_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"completed\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 - Chan xoa don completed",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{orders_url}}/orders/{{order_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14 - Thieu ton kho",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{orders_url}}/orders",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_name\": \"Test\",\n  \"customer_email\": \"t@example.com\",\n  \"items\": [\n    {\n      \"product_id\": {{product3_id}},\n      \"quantity\": 1\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "15 - Thieu JWT",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{orders_url}}/orders",
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 401\", function () { pm.response.to.have.status(401); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
