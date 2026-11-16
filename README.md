@@ -39,42 +39,6 @@ Lab04_OrderManagement/
 └── README.md
 ```
 
-## Cài đặt
-
-Yêu cầu **Python 3.10 trở lên**, **MySQL/MariaDB** (có thể dùng XAMPP) và Postman nếu muốn kiểm tra API bằng giao diện.
-
-Mở PowerShell tại thư mục dự án:
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install Flask==3.1.3 PyJWT==2.15.1 PyMySQL==1.2.3 requests==2.34.2 python-dotenv==1.2.4
-```
-
-Bật MySQL trong XAMPP. Sao chép cấu hình mẫu nếu chưa có `.env`:
-
-```powershell
-Copy-Item product_service/.env.example product_service/.env
-```
-
-Sửa `product_service/.env` theo cấu hình MySQL trên máy:
-
-```dotenv
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=lab03_products
-AUTH_URL=http://127.0.0.1:5001/auth
-```
-
-Khởi tạo database sản phẩm (giữ dữ liệu hiện có):
-
-```powershell
-.\.venv\Scripts\python.exe product_service/setup_db.py
-```
-
-TH2 và TH4 tự tạo database SQLite khi khởi động. Không đưa `.env`, khóa JWT, database, `.venv` hoặc `__pycache__` lên GitHub.
-
 ## Chạy bài
 
 Mở **ba cửa sổ PowerShell** tại thư mục dự án, mỗi cửa sổ chạy một dịch vụ:
